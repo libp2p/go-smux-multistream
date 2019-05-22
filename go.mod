@@ -1,4 +1,4 @@
-module github.com/whyrusleeping/go-smux-multistream
+module github.com/libp2p/go-stream-muxer-multistream
 
 go 1.12
 

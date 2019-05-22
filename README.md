@@ -7,7 +7,7 @@ This is an implementation of the [go-stream-muxer](https://github.com/libp2p/go-
 ## Installation
 
 ```sh
-go get -d github.com/whyrusleeping/go-smux-multistream
-cd $GOPATH/src/github.com/whyrusleeping/go-smux-multistream
+go get -d github.com/libp2p/go-stream-muxer-multistream
+cd $GOPATH/src/github.com/libp2p/go-stream-muxer-multistream
 make deps
 ```
