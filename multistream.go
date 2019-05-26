@@ -7,7 +7,8 @@ import (
 	"net"
 	"time"
 
-	smux "github.com/libp2p/go-stream-muxer"
+	"github.com/libp2p/go-libp2p-core/mux"
+
 	mss "github.com/multiformats/go-multistream"
 )
 
@@ -16,7 +17,7 @@ var DefaultNegotiateTimeout = time.Second * 60
 type Transport struct {
 	mux *mss.MultistreamMuxer
 
-	tpts map[string]smux.Transport
+	tpts map[string]mux.Multiplexer
 
 	NegotiateTimeout time.Duration
 
@@ -26,18 +27,18 @@ type Transport struct {
 func NewBlankTransport() *Transport {
 	return &Transport{
 		mux:              mss.NewMultistreamMuxer(),
-		tpts:             make(map[string]smux.Transport),
+		tpts:             make(map[string]mux.Multiplexer),
 		NegotiateTimeout: DefaultNegotiateTimeout,
 	}
 }
 
-func (t *Transport) AddTransport(path string, tpt smux.Transport) {
+func (t *Transport) AddTransport(path string, tpt mux.Multiplexer) {
 	t.mux.AddHandler(path, nil)
 	t.tpts[path] = tpt
 	t.OrderPreference = append(t.OrderPreference, path)
 }
 
-func (t *Transport) NewConn(nc net.Conn, isServer bool) (smux.Conn, error) {
+func (t *Transport) NewConn(nc net.Conn, isServer bool) (mux.MuxedConn, error) {
 	if t.NegotiateTimeout != 0 {
 		if err := nc.SetDeadline(time.Now().Add(t.NegotiateTimeout)); err != nil {
 			return nil, err
